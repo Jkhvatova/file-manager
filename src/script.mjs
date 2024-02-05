@@ -5,7 +5,9 @@ import { list } from "./fs/list.mjs";
 import calculateHash from "./hash/hash.mjs";
 import readGivenFile from "./fs/read.mjs";
 import  navigateToDir  from "./nav/toDir.mjs";
-//import {getDir, getHomeDir} from './os/dir.mjs';
+import compressFile from "./archive/compress.mjs";
+import decompressFile from "./archive/decompress.mjs";
+
 
 const args = process.argv;
 let userName = 'Guest';
@@ -49,7 +51,13 @@ rl.on('line', (input) => {
   .catch((error) => {
     console.error('Error calculating hash:', error);
   });
-  } else {
+  } else if (input.startsWith('compress')) {
+    compressFile(input);
+    rl.prompt();
+  } else if (input.startsWith('decompress')) {
+    decompressFile(input);
+    rl.prompt();
+   } else {
     console.log(`Invalid input message\n`);
     rl.prompt();
   }
