@@ -1,5 +1,6 @@
 import os from 'os';
 import readline from 'readline';
+import { getOsInfo } from "./os/os.mjs";
 import { list } from "./fs/list.mjs";
 //import {getDir, getHomeDir} from './os/dir.mjs';
 
@@ -30,7 +31,11 @@ rl.on('line', (input) => {
     rl.close();
   }  else if (input === 'ls') {
     list();
-  }else {
+    rl.prompt();
+  }  else if (input.startsWith('os')) {
+    getOsInfo(input);
+    rl.prompt();
+  } else {
     console.log(`Invalid input message\n`);
     rl.prompt();
   }
