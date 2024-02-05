@@ -3,6 +3,8 @@ import readline from 'readline';
 import { getOsInfo } from "./os/os.mjs";
 import { list } from "./fs/list.mjs";
 import calculateHash from "./hash/hash.mjs";
+import readGivenFile from "./fs/read.mjs";
+import  navigateToDir  from "./nav/toDir.mjs";
 //import {getDir, getHomeDir} from './os/dir.mjs';
 
 const args = process.argv;
@@ -27,16 +29,22 @@ rl.on('line', (input) => {
   if (input === '.exit') {
     console.log(`Thank you for using File Manager,  ${userName}, goodbye!`);
     rl.close();
-  }  else if (input === 'ls') {
+  }  else if (input.startsWith('cd')) {
+    navigateToDir(input);
+    rl.prompt();
+  }   else if (input === 'ls') {
     list();
     rl.prompt();
-  }  else if (input.startsWith('os')) {
+  }  else if (input.startsWith('read')) {
+    readGivenFile(input);
+    rl.prompt();
+  } else if (input.startsWith('os')) {
     getOsInfo(input);
     rl.prompt();
   } else if (input.startsWith('hash')) {
     calculateHash(input)
   .then((hash) => {
-    console.log(`Hash: ${hash}`);
+    console.log(`Hash (sha256): ${hash}`);
   })
   .catch((error) => {
     console.error('Error calculating hash:', error);
@@ -45,6 +53,7 @@ rl.on('line', (input) => {
     console.log(`Invalid input message\n`);
     rl.prompt();
   }
+  console.log('You are currently in ', process.cwd());
 });
 
 process.on('SIGINT', () => {
